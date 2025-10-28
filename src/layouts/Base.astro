@@ -1,0 +1,36 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";  // ✅ this line includes Tailwind + custom CSS
+
+
+const {
+  title = "Pine Ridge Beef — Farm-Raised Beef Shares",
+  description = "Reserve farm-raised beef shares directly from Pine Ridge Beef in Richmond, KY. Transparent pricing for quarter, half, and whole cows. USDA processing, vacuum-sealed cuts, easy pickup.",
+  canonical = "https://example.com",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#2F5D46" />
+  </head>
+  <body class="min-h-screen bg-[#F7FAF8] text-[#1C1C1C] antialiased">
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

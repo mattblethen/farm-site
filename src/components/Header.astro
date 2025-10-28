@@ -1,0 +1,154 @@
+---
+const links = [
+  { label: "Beef Shares", href: "/beef-shares" },
+  { label: "Process", href: "/process" },
+  { label: "About", href: "/about" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "FAQ", href: "/faq" },
+];
+---
+
+<header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-black/5">
+  <div class="mx-auto max-w-[1200px] px-4 md:px-6 py-3 flex items-center justify-between">
+    <a href="/" class="font-semibold tracking-tight text-[#1C1C1C] hover:text-[#2F5D46] transition">
+      Pine Ridge Beef
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex gap-6 text-sm">
+      {links.map((l) => (
+        <a href={l.href} class="hover:underline">{l.label}</a>
+      ))}
+      <a
+        href="/reserve"
+        class="inline-flex items-center rounded-2xl bg-[#2F5D46] text-white px-3 py-1.5 hover:opacity-90 transition"
+      >
+        Reserve
+      </a>
+    </nav>
+
+    <!-- Mobile menu toggle -->
+    <button
+      class="md:hidden inline-flex items-center justify-center p-2 rounded text-[#2F5D46] hover:bg-[#2F5D46]/10"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobileMenu"
+      type="button"
+      data-menu-button
+    >
+      ☰
+    </button>
+  </div>
+
+  <!-- Mobile menu drawer (JS toggles data-open & aria-hidden) -->
+  <div
+    id="mobileMenu"
+    class="md:hidden fixed inset-0 z-50 pointer-events-none"
+    data-open="false"
+    aria-hidden="true"
+  >
+    <!-- Backdrop -->
+    <div
+      data-backdrop
+      class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-200"
+    ></div>
+
+    <!-- Sheet -->
+    <nav
+      data-sheet
+      class="absolute left-0 right-0 top-0 origin-top rounded-b-2xl bg-white border-b border-black/10 shadow-xl
+             translate-y-[-100%] transition-transform duration-300"
+    >
+      <div class="px-4 py-3 flex items-center justify-between">
+        <span class="font-semibold">Menu</span>
+        <button
+          type="button"
+          aria-label="Close menu"
+          data-close
+          class="inline-flex items-center justify-center p-2 rounded text-[#2F5D46] hover:bg-[#2F5D46]/10"
+        >
+          ✕
+        </button>
+      </div>
+
+      <ul class="px-4 pb-4 pt-1 space-y-2 text-base">
+        {links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class="block px-3 py-2 rounded hover:bg-black/5"
+              data-menu-link
+            >
+              {l.label}
+            </a>
+          </li>
+        ))}
+        <li class="pt-1">
+          <a
+            href="/reserve"
+            class="block text-center rounded-2xl bg-[#2F5D46] text-white px-3 py-2 hover:opacity-90"
+            data-menu-link
+          >
+            Reserve
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Minimal, inline script: no hydration library needed -->
+  <script is:inline>
+    (() => {
+      const btn = document.querySelector('[data-menu-button]');
+      const panel = document.getElementById('mobileMenu');
+      if (!btn || !panel) return;
+
+      const backdrop = panel.querySelector('[data-backdrop]');
+      const sheet = panel.querySelector('[data-sheet]');
+      const closeBtn = panel.querySelector('[data-close]');
+      const links = panel.querySelectorAll('[data-menu-link]');
+
+      const open = () => {
+        panel.dataset.open = 'true';
+        panel.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('overflow-hidden');
+        btn.setAttribute('aria-expanded', 'true');
+        panel.style.pointerEvents = 'auto';
+        // animate in
+        requestAnimationFrame(() => {
+          backdrop && (backdrop.style.opacity = '1');
+          sheet && (sheet.style.transform = 'translateY(0)');
+        });
+        // focus first link for accessibility
+        links[0]?.focus();
+      };
+
+      const close = () => {
+        panel.dataset.open = 'false';
+        panel.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('overflow-hidden');
+        btn.setAttribute('aria-expanded', 'false');
+        panel.style.pointerEvents = 'none';
+        // animate out
+        backdrop && (backdrop.style.opacity = '0');
+        sheet && (sheet.style.transform = 'translateY(-100%)');
+        // return focus to button
+        btn.focus();
+      };
+
+      btn.addEventListener('click', () => {
+        const isOpen = panel.dataset.open === 'true';
+        isOpen ? close() : open();
+      });
+
+      closeBtn?.addEventListener('click', close);
+      backdrop?.addEventListener('click', close);
+      links.forEach((a) => a.addEventListener('click', close));
+
+      // ESC to close
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && panel.dataset.open === 'true') close();
+      });
+    })();
+  </script>
+</header>

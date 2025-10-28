@@ -1,0 +1,148 @@
+---
+layout: ../layouts/Base.astro
+title: "About Pine Ridge Beef — Family Farm in Richmond, KY"
+description: "Meet the family behind Pine Ridge Beef in Richmond, KY. Pasture-raised cattle, humane handling, USDA processing, and transparent pricing for quarter, half, and whole beef shares."
+canonical: "https://example.com/about"
+---
+
+{/* JSON-LD (Organization + LocalBusiness) */}
+<script type="application/ld+json">
+{JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": ["Organization","LocalBusiness"],
+  "name": "Pine Ridge Beef",
+  "url": "https://example.com",
+  "email": "hello@pineridgebeef.com",
+  "telephone": "(859) 555-0123",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 Farm Lane",
+    "addressLocality": "Richmond",
+    "addressRegion": "KY",
+    "postalCode": "40475",
+    "addressCountry": "US"
+  },
+  "logo": "https://example.com/images/logo-600x200.svg",
+  "image": [
+    "https://example.com/images/about-family-1200x800.png",
+    "https://example.com/images/about-pasture-1600x900.png"
+  ],
+  "sameAs": []
+})}
+</script>
+
+<section class="section">
+  <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+    <h1 class="text-3xl md:text-5xl font-semibold">Our Family, Our Pasture</h1>
+    <p class="mt-4 text-lg max-w-2xl text-black/80">
+      We’re a small family farm in Richmond, Kentucky, raising cattle with care on rotating pasture.
+      Our promise is simple: humane handling, honest math, and beef you’ll be proud to serve.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="mx-auto max-w-[1200px] px-4 md:px-6 grid gap-6 md:grid-cols-[1.1fr,0.9fr] items-center rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
+    <div class="p-6 md:p-8">
+      <h2 class="text-2xl md:text-3xl font-semibold">Why Pine Ridge Beef?</h2>
+      <ul class="mt-4 space-y-2 text-black/80">
+        <li>• <strong>Pasture-raised</strong> with seasonal forage and rotational grazing.</li>
+        <li>• <strong>USDA processing</strong> with vacuum-sealed, labeled cuts.</li>
+        <li>• <strong>Transparent pricing</strong> on ¼, ½, and whole beef shares.</li>
+        <li>• <strong>Local pickup</strong> and affordable delivery options.</li>
+        <li>• <strong>No gimmicks</strong>—just clear communication and great beef.</li>
+      </ul>
+    </div>
+
+    {/* CLS-safe image */}
+    <img
+      src="/images/about-family-1200x800.png"
+      alt="The Pine Ridge Beef family standing on the farm at sunset"
+      width="1200"
+      height="800"
+      loading="lazy"
+      decoding="async"
+      class="w-full h-auto"
+    />
+  </div>
+</section>
+
+<section class="section bg-[#F3EBDD]">
+  <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+    <h2 class="text-2xl md:text-3xl font-semibold">Our Approach</h2>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <article class="rounded-2xl bg-white p-6 border border-black/10 shadow-sm">
+        <h3 class="font-semibold">Rotational Grazing</h3>
+        <p class="mt-2 text-sm text-black/70">
+          Moving cattle regularly allows pastures to rest, improving soil health and forage quality.
+        </p>
+      </article>
+      <article class="rounded-2xl bg-white p-6 border border-black/10 shadow-sm">
+        <h3 class="font-semibold">Animal Welfare</h3>
+        <p class="mt-2 text-sm text-black/70">
+          Calm handling reduces stress for better flavor and texture—because care shows up on the plate.
+        </p>
+      </article>
+      <article class="rounded-2xl bg-white p-6 border border-black/10 shadow-sm">
+        <h3 class="font-semibold">Honest Communication</h3>
+        <p class="mt-2 text-sm text-black/70">
+          We explain weights, yields, and fees upfront. You always know what you’re getting.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="mx-auto max-w-[1200px] px-4 md:px-6 grid gap-6 md:grid-cols-2 items-start">
+    {/* CLS-safe image */}
+    <img
+      src="/images/about-pasture-1600x900.png"
+      alt="Aerial view of rolling pasture with cattle at Pine Ridge Beef"
+      width="1600"
+      height="900"
+      loading="lazy"
+      decoding="async"
+      class="w-full h-auto rounded-2xl border border-black/5 shadow-sm"
+    />
+    <div class="p-0 md:p-2">
+      <h2 class="text-2xl md:text-3xl font-semibold">The Land</h2>
+      <p class="mt-3 text-black/80">
+        Healthy soil, clean water, and diverse forage are the foundation of our herd. We monitor pasture
+        condition throughout the year and adjust grazing rotations to protect the land for the long run.
+      </p>
+      <ul class="mt-4 space-y-2 text-black/80 text-sm">
+        <li>• Seasonal pasture planning &amp; forage tests</li>
+        <li>• Shade, windbreaks, and clean water access</li>
+        <li>• Erosion-minded traffic patterns for herd movement</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-[#F7FAF8] border-t border-black/5">
+  <div class="mx-auto max-w-[1200px] px-4 md:px-6 grid gap-6 md:grid-cols-[0.9fr,1.1fr] items-center rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
+    <div class="p-6 md:p-8">
+      <h2 class="text-2xl md:text-3xl font-semibold">From Our Family to Yours</h2>
+      <p class="mt-3 text-black/80">
+        We sell directly to families who care about where their food comes from. Whether you’re new to buying beef in bulk
+        or you’ve filled a freezer for years, we’re here to help make it simple.
+      </p>
+      <div class="mt-5 flex gap-3">
+        <a href="/beef-shares" class="text-[#2F5D46] underline underline-offset-4">See pricing</a>
+        <a href="/reserve" class="inline-flex items-center rounded-2xl bg-[#2F5D46] text-white px-4 py-2 hover:opacity-90">Reserve a share</a>
+      </div>
+    </div>
+
+    {/* CLS-safe image */}
+    <img
+      src="/images/about-barn-1200x800.png"
+      alt="Barn interior with labeled, vacuum-sealed beef packages ready for pickup"
+      width="1200"
+      height="800"
+      loading="lazy"
+      decoding="async"
+      class="w-full h-auto"
+    />
+  </div>
+</section>

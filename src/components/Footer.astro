@@ -1,0 +1,27 @@
+---
+const year = new Date().getFullYear();
+const SITE = {
+  name: "Pine Ridge Beef",
+  phone: "(859) 555-0123",
+  email: "hello@pineridgebeef.com",
+  address: "123 Farm Lane, Richmond, KY 40475",
+};
+---
+
+<footer class="border-t border-black/5 bg-white">
+  <div class="mx-auto max-w-[1200px] px-4 md:px-6 py-8 text-sm text-black/70">
+    <div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+      <div>
+        <strong>{SITE.name}</strong> — {SITE.address}
+      </div>
+      <div class="flex gap-4">
+        <a class="hover:underline" href={`tel:${SITE.phone.replace(/[^0-9]/g, "")}`}>{SITE.phone}</a>
+        <a class="hover:underline" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </div>
+    </div>
+    <div class="mt-4 text-xs text-black/50">© {year} {SITE.name}. All rights reserved.</div>
+  </div>
+</footer>
+<style>
+    footer{margin-top:20px;}
+</style>

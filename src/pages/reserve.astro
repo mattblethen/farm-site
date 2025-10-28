@@ -1,0 +1,142 @@
+---
+import Base from "../layouts/Base.astro";
+
+const SITE = {
+  url: "https://example.com",
+  name: "Pine Ridge Beef",
+};
+
+const title = "Reserve a Beef Share — Pine Ridge Beef";
+const description =
+  "Reserve a quarter, half, or whole beef share from Pine Ridge Beef. No payment is collected on this demo—submit your preferences and we’ll follow up with dates and details.";
+
+const shareFromURL = Astro.url.searchParams.get("share") ?? "";
+const months = [
+  "Next Available",
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
+---
+
+<Base title={title} description={description} canonical={`${SITE.url}/reserve`}>
+  <!-- WebPage schema -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: title,
+      description,
+      url: `${SITE.url}/reserve`,
+    })}
+  </script>
+
+  <section class="section">
+    <div class="mx-auto max-w-[900px] px-4 md:px-6">
+      <h1 class="text-3xl md:text-5xl font-semibold">Reserve Your Beef Share</h1>
+      <p class="mt-4 text-lg text-black/80">
+        This is a demo—<strong>no payment is collected</strong>. Submit your details and preferred timing, and we’ll confirm the next available butcher date.
+      </p>
+      <p class="mt-2 text-sm text-black/60">
+        Pricing is transparent and based on hanging weight plus processor fees. See <a class="text-pine underline underline-offset-4" href="/beef-shares">Beef Shares</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="mx-auto max-w-[900px] px-4 md:px-6">
+      <form
+        action="/reserve/sent"
+        method="get"
+        class="rounded-2xl bg-white border border-black/5 shadow-sm p-6 md:p-8 space-y-5"
+      >
+        <!-- Anti-spam honeypot -->
+        <div class="hidden" aria-hidden="true">
+          <label>
+            If you are a human, leave this field blank
+            <input type="text" name="website" tabindex="-1" autocomplete="off" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="name" class="block text-sm font-medium">Full Name</label>
+            <input id="name" name="name" required autocomplete="name"
+                   class="mt-1 w-full rounded-lg border border-black/10 bg-white px-3 py-2" />
+          </div>
+
+          <div>
+            <label for="phone" class="block text-sm font-medium">Phone</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel"
+                   class="mt-1 w-full rounded-lg border border-black/10 bg-white px-3 py-2" />
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email"
+                   class="mt-1 w-full rounded-lg border border-black/10 bg-white px-3 py-2" />
+          </div>
+
+          <div>
+            <label for="share" class="block text-sm font-medium">Share Size</label>
+            <select id="share" name="share" required
+                    class="mt-1 w-full rounded-lg border border-black/10 bg-white px-3 py-2">
+              <option value="" disabled selected={shareFromURL === ""}>Select…</option>
+              <option value="quarter" selected={shareFromURL === "quarter"}>¼ Share</option>
+              <option value="half" selected={shareFromURL === "half"}>½ Share</option>
+              <option value="whole" selected={shareFromURL === "whole"}>Whole</option>
+            </select>
+          </div>
+        </div>
+
+        <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <legend class="block text-sm font-medium">Pickup or Delivery</legend>
+            <div class="mt-2 flex gap-4">
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="fulfillment" value="pickup" required />
+                <span>Pickup</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input type="radio" name="fulfillment" value="delivery" />
+                <span>Delivery (if available)</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label for="month" class="block text-sm font-medium">Preferred Month</label>
+            <select id="month" name="month"
+                    class="mt-1 w-full rounded-lg border border-black/10 bg-white px-3 py-2">
+              {months.map((m) => <option value={m}>{m}</option>)}
+            </select>
+          </div>
+        </fieldset>
+
+        <div>
+          <label for="notes" class="block text-sm font-medium">Notes (cut preferences, freezer size, questions)</label>
+          <textarea id="notes" name="notes" rows="4"
+                    class="mt-1 w-full rounded-lg border border-black/10 bg-white px-3 py-2"></textarea>
+        </div>
+
+        <label class="flex items-start gap-2 text-sm">
+          <input type="checkbox" name="consent" value="true" required />
+          <span>I understand totals depend on hanging weight and processor fees.</span>
+        </label>
+
+        <div class="pt-2 flex flex-wrap gap-3">
+          <button type="submit"
+                  class="inline-flex items-center rounded-2xl bg-pine text-white px-5 py-2.5 hover:opacity-90">
+            Submit Reserve Request
+          </button>
+          <a href="/beef-shares" class="inline-flex items-center rounded-2xl border border-black/10 bg-white px-5 py-2.5 hover:bg-white/90">
+            Review Pricing
+          </a>
+        </div>
+
+        <p class="text-xs text-black/50">
+          This demo does not collect payment. After submitting, you’ll see a summary and we’ll follow up by email.
+        </p>
+      </form>
+    </div>
+  </section>
+</Base>

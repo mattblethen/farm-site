@@ -1,0 +1,201 @@
+---
+import Base from "../layouts/Base.astro";
+
+const SITE = {
+  url: "https://example.com",
+  name: "Pine Ridge Beef",
+};
+
+// Main page metadata
+const title = "Beef Shares & Transparent Pricing — Pine Ridge Beef";
+const description =
+  "Understand exactly what you get in each quarter, half, or whole beef share from Pine Ridge Beef. Clear math, example weights, and no hidden fees.";
+
+// pricing & math examples
+const SHARES = [
+  {
+    id: "quarter",
+    name: "¼ Share",
+    estTakehome: "105–120 lb",
+    freezer: "4–5 cu ft",
+    hanging: 162.5,
+    pricePerLb: 4.5,
+    slaughterFee: 150,
+    cutWrap: 1.1,
+    yield: "65–75%",
+    estTotal: "$900–$1,050",
+    image: "/images/share-quarter-800x600.png",
+  },
+  {
+    id: "half",
+    name: "½ Share",
+    estTakehome: "210–240 lb",
+    freezer: "8–10 cu ft",
+    hanging: 325,
+    pricePerLb: 4.5,
+    slaughterFee: 150,
+    cutWrap: 1.1,
+    yield: "65–75%",
+    estTotal: "$1,750–$2,050",
+    image: "/images/share-half-800x600.png",
+  },
+  {
+    id: "whole",
+    name: "Whole",
+    estTakehome: "420–480 lb",
+    freezer: "16–20 cu ft",
+    hanging: 650,
+    pricePerLb: 4.5,
+    slaughterFee: 150,
+    cutWrap: 1.1,
+    yield: "65–75%",
+    estTotal: "$3,400–$3,900",
+    image: "/images/share-whole-800x600.png",
+  },
+];
+---
+
+<Base title={title} description={description} canonical={`${SITE.url}/beef-shares`}>
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: "Farm-Raised Beef Shares",
+      description,
+      image: [`${SITE.url}/images/share-quarter-800x600.png`],
+      brand: { "@type": "Brand", name: SITE.name },
+      offers: SHARES.map((s) => ({
+        "@type": "Offer",
+        name: s.name,
+        priceCurrency: "USD",
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          price: s.estTotal.replace(/[^0-9–]/g, ""),
+        },
+        availability: "https://schema.org/PreOrder",
+        url: `${SITE.url}/reserve?share=${s.id}`,
+      })),
+    })}
+  </script>
+
+  <!-- Hero -->
+  <section class="relative">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6 py-16 md:py-20">
+      <h1 class="text-3xl md:text-5xl font-semibold">Beef Shares & Transparent Pricing</h1>
+      <p class="mt-4 text-lg max-w-2xl text-black/80">
+        Here’s everything you need to know about buying beef in bulk from Pine Ridge Beef. 
+        We keep it simple, honest, and local—no surprises when it comes to weight, cost, or cuts.
+      </p>
+    </div>
+  </section>
+
+  <!-- Share cards -->
+  <section class="pb-16 md:pb-20">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      {SHARES.map((s) => (
+        <article id={s.id} class="rounded-2xl bg-white shadow-sm border border-black/5 overflow-hidden flex flex-col">
+          <img
+            src={s.image}
+            alt={`${s.name} beef share example packaging`}
+            width="800"
+            height="600"
+            class="w-full h-auto"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-6 flex flex-col flex-grow">
+            <h2 class="text-xl font-semibold">{s.name}</h2>
+            <ul class="mt-3 text-sm text-black/80 space-y-1">
+              <li><strong>Estimated take-home:</strong> {s.estTakehome}</li>
+              <li><strong>Freezer space:</strong> {s.freezer}</li>
+              <li><strong>Hanging weight:</strong> ~{s.hanging} lb</li>
+              <li><strong>Farm price:</strong> ${s.pricePerLb.toFixed(2)}/lb hanging</li>
+              <li><strong>Slaughter fee (split):</strong> ${(s.slaughterFee / 4).toFixed(2)} for quarter, ${(s.slaughterFee / 2).toFixed(2)} for half, {s.slaughterFee} for whole</li>
+              <li><strong>Cut & wrap:</strong> ${s.cutWrap.toFixed(2)}/lb hanging</li>
+              <li><strong>Yield:</strong> {s.yield}</li>
+            </ul>
+            <p class="mt-3 text-black/80"><strong>Estimated Total:</strong> {s.estTotal}</p>
+            <a href={`/reserve?share=${s.id}`} class="mt-4 inline-flex justify-center rounded-2xl bg-[#2F5D46] text-white px-4 py-2 hover:opacity-90">
+              Reserve {s.name}
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Pricing breakdown example -->
+  <section class="bg-[#F3EBDD] py-16 md:py-20">
+    <div class="mx-auto max-w-[900px] px-4 md:px-6">
+      <h2 class="text-2xl md:text-3xl font-semibold">Example Breakdown (¼ Share)</h2>
+      <p class="mt-3 text-black/80">
+        Here's a sample calculation so you can see exactly how the pricing works:
+      </p>
+      <ul class="mt-6 space-y-2 text-black/80 text-sm">
+        <li>Average hanging weight: 650 lb total → <strong>¼ = 162.5 lb</strong></li>
+        <li>Farm price: 162.5 × $4.50 = <strong>$731.25</strong></li>
+        <li>Slaughter fee (split 4 ways): $150 ÷ 4 = <strong>$37.50</strong></li>
+        <li>Cut & wrap: 162.5 × $1.10 = <strong>$178.75</strong></li>
+        <li>Total estimated cost: <strong>$947.50</strong></li>
+        <li>Yield (65–75%) → 105–120 lb take-home → ~<strong>$8.00/lb</strong> finished beef</li>
+      </ul>
+      <p class="mt-6 text-sm text-black/60">
+        *Estimates vary by animal and your chosen cuts. You’ll receive an exact invoice once hanging weights are confirmed.
+      </p>
+    </div>
+  </section>
+
+  <!-- Cuts & yields section -->
+  <section class="py-16 md:py-20">
+    <div class="mx-auto max-w-[900px] px-4 md:px-6">
+      <h2 class="text-2xl md:text-3xl font-semibold">Typical Cuts Included</h2>
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-black/80">
+        <ul class="space-y-1">
+          <li>• Ribeye / T-Bone / NY Strip (varies by cut sheet)</li>
+          <li>• Sirloin Steaks</li>
+          <li>• Roasts (Chuck, Arm, Rump, Sirloin Tip)</li>
+          <li>• Brisket (or ground)</li>
+          <li>• Stew meat</li>
+        </ul>
+        <ul class="space-y-1">
+          <li>• Short ribs</li>
+          <li>• Soup bones (optional)</li>
+          <li>• Ground beef (approx. 40–60 lb per quarter)</li>
+          <li>• Liver, heart, or tongue (optional)</li>
+          <li>• All vacuum-sealed and labeled</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ preview -->
+  <section class="bg-[#F7FAF8] py-16 md:py-20 border-t border-black/5">
+    <div class="mx-auto max-w-[900px] px-4 md:px-6">
+      <h2 class="text-2xl md:text-3xl font-semibold">Common Questions</h2>
+      <div class="mt-6 space-y-4 text-black/80 text-sm">
+        <details class="rounded-lg bg-white p-4 border border-black/10">
+          <summary class="cursor-pointer font-medium">How much freezer space will I need?</summary>
+          <p class="mt-2 text-black/70">A ¼ cow requires about 4–5 cu ft, ½ needs 8–10 cu ft, and a whole about 16–20 cu ft.</p>
+        </details>
+        <details class="rounded-lg bg-white p-4 border border-black/10">
+          <summary class="cursor-pointer font-medium">Do I get to choose my cuts?</summary>
+          <p class="mt-2 text-black/70">Yes! Before butchering, you’ll complete a cut sheet to select your preferred steak thickness, roast sizes, and more.</p>
+        </details>
+        <details class="rounded-lg bg-white p-4 border border-black/10">
+          <summary class="cursor-pointer font-medium">How long does the process take?</summary>
+          <p class="mt-2 text-black/70">From your reservation to pickup, plan on 4–8 weeks depending on butcher scheduling and dry-aging time.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 md:py-20 text-center">
+    <h2 class="text-2xl md:text-3xl font-semibold">Ready to reserve your share?</h2>
+    <p class="mt-2 text-black/70">Reserve today and we’ll confirm the next available butcher date.</p>
+    <div class="mt-5 flex justify-center gap-3">
+      <a href="/reserve" class="inline-flex items-center rounded-2xl bg-[#2F5D46] text-white px-5 py-2.5 hover:opacity-90">Reserve Now</a>
+      <a href="/contact" class="inline-flex items-center rounded-2xl bg-white text-[#1C1C1C] px-5 py-2.5 border border-black/10 hover:bg-white/90">Contact Us</a>
+    </div>
+  </section>
+</Base>

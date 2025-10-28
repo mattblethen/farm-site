@@ -1,0 +1,94 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const SITE = { url: "https://example.com", name: "Pine Ridge Beef" };
+const title = "Reservation Received — Pine Ridge Beef";
+const description = "We’ve logged your reservation request. This demo doesn’t collect payment.";
+
+// Read query params (GET)
+const q = Astro.url.searchParams;
+const name = q.get("name") || "Customer";
+const email = q.get("email") || "";
+const phone = q.get("phone") || "";
+const share = q.get("share") || "";
+const fulfillment = q.get("fulfillment") || "";
+const month = q.get("month") || "Next Available";
+const notes = q.get("notes") || "";
+const consent = q.get("consent") === "true";
+const honeypot = q.get("website") || ""; // if present, likely spam
+---
+
+<Base title={title} description={description} canonical={`${SITE.url}/reserve/sent`}>
+  <!-- WebPage schema -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: title,
+      description,
+      url: `${SITE.url}/reserve/sent`,
+    })}
+  </script>
+
+  <section class="section">
+    <div class="mx-auto max-w-[900px] px-4 md:px-6 rounded-2xl bg-white border border-black/5 shadow-sm p-6 md:p-8">
+      <h1 class="text-3xl md:text-4xl font-semibold">Thanks, {name}! 🙌</h1>
+      <p class="mt-3 text-black/80">
+        We’ve recorded your reservation request. This is a demo—no payment was collected. We’ll contact you with the next available butcher date and exact totals.
+      </p>
+
+      {honeypot && (
+        <p class="mt-3 text-sm text-red-600">
+          (Heads-up: your submission triggered a spam filter and may not be processed automatically.)
+        </p>
+      )}
+
+      <div class="mt-6">
+        <h2 class="text-xl font-semibold">Request Summary</h2>
+        <dl class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+          <div>
+            <dt class="text-black/60">Share Size</dt>
+            <dd class="font-medium">{share || "—"}</dd>
+          </div>
+          <div>
+            <dt class="text-black/60">Pickup/Delivery</dt>
+            <dd class="font-medium">{fulfillment || "—"}</dd>
+          </div>
+          <div>
+            <dt class="text-black/60">Preferred Month</dt>
+            <dd class="font-medium">{month}</dd>
+          </div>
+          <div>
+            <dt class="text-black/60">Consent to pricing terms</dt>
+            <dd class="font-medium">{consent ? "Yes" : "No"}</dd>
+          </div>
+          <div>
+            <dt class="text-black/60">Name</dt>
+            <dd class="font-medium">{name}</dd>
+          </div>
+          <div>
+            <dt class="text-black/60">Email</dt>
+            <dd class="font-medium break-words">{email || "—"}</dd>
+          </div>
+          <div>
+            <dt class="text-black/60">Phone</dt>
+            <dd class="font-medium">{phone || "—"}</dd>
+          </div>
+          <div class="sm:col-span-2">
+            <dt class="text-black/60">Notes</dt>
+            <dd class="font-medium whitespace-pre-wrap">{notes || "—"}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/beef-shares" class="inline-flex items-center rounded-2xl bg-pine text-white px-5 py-2.5 hover:opacity-90">See Pricing Again</a>
+        <a href="/reserve" class="inline-flex items-center rounded-2xl border border-black/10 bg-white px-5 py-2.5 hover:bg-white/90">Submit Another</a>
+      </div>
+
+      <p class="mt-6 text-xs text-black/50">
+        Tip: In production you can swap this demo flow for Square Checkout Links or a custom checkout while keeping this page as the post-payment confirmation.
+      </p>
+    </div>
+  </section>
+</Base>

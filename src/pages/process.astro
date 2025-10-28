@@ -1,0 +1,254 @@
+---
+import Base from "../layouts/Base.astro";
+
+// Basic site constants (tweak when live)
+const SITE = {
+  url: "https://example.com",
+  name: "Pine Ridge Beef",
+};
+
+// Page meta
+const title = "How It Works — From Pasture to Freezer | Pine Ridge Beef";
+const description =
+  "See exactly how buying a quarter, half, or whole beef share works—reservation, butcher date, cut sheet, dry-aging, final weights, and pickup or delivery.";
+
+// Static images (add these files to /public/images/ with exact sizes)
+const IMG = {
+  reserve: "/images/process-reserve-1200x600.png",
+  butcher: "/images/process-butcher-1200x600.png",
+  cutsheet: "/images/process-cutsheet-1200x600.png",
+  aging: "/images/process-aging-1200x600.png",
+  weighing: "/images/process-weight-1200x600.png",
+  pickup: "/images/process-pickup-1200x600.png",
+};
+---
+
+<Base title={title} description={description} canonical={`${SITE.url}/process`}>
+  <!-- HowTo schema for the full process -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to Reserve a Beef Share",
+      "description": description,
+      "totalTime": "P4W", // typical 4–8 weeks; conservative example
+      "supply": [
+        { "@type": "HowToSupply", "name": "Reservation deposit (if applicable)" },
+        { "@type": "HowToSupply", "name": "Cut sheet preferences" },
+        { "@type": "HowToSupply", "name": "Freezer space" }
+      ],
+      "tool": [
+        { "@type": "HowToTool", "name": "USDA processor" }
+      ],
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Reserve your share",
+          "url": `${SITE.url}/reserve`,
+          "image": `${SITE.url}${IMG.reserve}`,
+          "text": "Choose ¼, ½, or whole. We’ll confirm the next butcher date."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Butcher date scheduled",
+          "image": `${SITE.url}${IMG.butcher}`,
+          "text": "We assign your animal to an upcoming processor date."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Complete your cut sheet",
+          "image": `${SITE.url}${IMG.cutsheet}`,
+          "text": "Pick steak thickness, roast sizes, ground %, keep bones/organs, etc."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Dry-aging & processing",
+          "image": `${SITE.url}${IMG.aging}`,
+          "text": "Beef typically dry-ages before being cut, labeled, and vacuum-sealed."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Final weight & invoice",
+          "image": `${SITE.url}${IMG.weighing}`,
+          "text": "We share hanging weights and the final calculation before pickup."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Pickup or delivery",
+          "image": `${SITE.url}${IMG.pickup}`,
+          "text": "Meet at the processor for pickup or schedule local delivery."
+        }
+      ]
+    })}
+  </script>
+
+  <!-- HERO -->
+  <section class="py-section-sm md:py-section-lg">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <h1 class="text-3xl md:text-5xl font-semibold">How It Works</h1>
+      <p class="mt-4 text-lg max-w-2xl text-black/80">
+        From reservation to pickup, here’s the simple, transparent process for buying a quarter, half, or whole beef share from {SITE.name}.
+      </p>
+    </div>
+  </section>
+
+  <!-- TIMELINE / STEPS -->
+  <section class="py-section-sm md:py-section-lg">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6 grid gap-8">
+      <!-- Step 1 -->
+      <article id="step-reserve" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <img
+            src={IMG.reserve}
+            alt="Online reservation for beef share"
+            width="1200"
+            height="600"
+            class="w-full h-auto"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <div class="p-6 md:p-8">
+            <div class="text-sm uppercase tracking-wide text-black/60">Step 1</div>
+            <h2 class="mt-1 text-2xl font-semibold">Reserve your share</h2>
+            <p class="mt-3 text-black/80">
+              Choose ¼, ½, or whole—then we’ll confirm the next available butcher date and any deposit if required.
+            </p>
+            <div class="mt-5 flex gap-3">
+              <a href="/beef-shares" class="text-[#2F5D46] underline underline-offset-4">See pricing</a>
+              <a href="/reserve" class="inline-flex items-center rounded-2xl bg-[#2F5D46] text-white px-4 py-2 hover:opacity-90">Reserve</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Step 2 -->
+      <article id="step-butcher" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <img
+            src={IMG.butcher}
+            alt="USDA processor scheduling"
+            width="1200"
+            height="600"
+            class="w-full h-auto"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-6 md:p-8">
+            <div class="text-sm uppercase tracking-wide text-black/60">Step 2</div>
+            <h2 class="mt-1 text-2xl font-semibold">Butcher date scheduled</h2>
+            <p class="mt-3 text-black/80">
+              We assign your animal to a USDA processor date. We’ll share timing and any prep details as the day approaches.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Step 3 -->
+      <article id="step-cutsheet" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <img
+            src={IMG.cutsheet}
+            alt="Customer filling out a meat cut sheet"
+            width="1200"
+            height="600"
+            class="w-full h-auto"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-6 md:p-8">
+            <div class="text-sm uppercase tracking-wide text-black/60">Step 3</div>
+            <h2 class="mt-1 text-2xl font-semibold">Complete your cut sheet</h2>
+            <p class="mt-3 text-black/80">
+              Choose steak thickness, roast sizes, ground beef mix, keep soup bones/organs, and more. We can help you decide.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Step 4 -->
+      <article id="step-aging" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <img
+            src={IMG.aging}
+            alt="Beef dry-aging in a cold room"
+            width="1200"
+            height="600"
+            class="w-full h-auto"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-6 md:p-8">
+            <div class="text-sm uppercase tracking-wide text-black/60">Step 4</div>
+            <h2 class="mt-1 text-2xl font-semibold">Dry-aging & processing</h2>
+            <p class="mt-3 text-black/80">
+              After harvest, beef typically dry-ages before being cut, labeled, and vacuum-sealed for long freezer life.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Step 5 -->
+      <article id="step-weight" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <img
+            src={IMG.weighing}
+            alt="Butcher scale showing hanging weight"
+            width="1200"
+            height="600"
+            class="w-full h-auto"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-6 md:p-8">
+            <div class="text-sm uppercase tracking-wide text-black/60">Step 5</div>
+            <h2 class="mt-1 text-2xl font-semibold">Final weight & invoice</h2>
+            <p class="mt-3 text-black/80">
+              We share hanging weights and the final calculation based on farm price, slaughter fee, and cut &amp; wrap.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Step 6 -->
+      <article id="step-pickup" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <img
+            src={IMG.pickup}
+            alt="Customer loading labeled beef boxes at processor"
+            width="1200"
+            height="600"
+            class="w-full h-auto"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-6 md:p-8">
+            <div class="text-sm uppercase tracking-wide text-black/60">Step 6</div>
+            <h2 class="mt-1 text-2xl font-semibold">Pickup or delivery</h2>
+            <p class="mt-3 text-black/80">
+              Meet at the processor for pickup, or schedule local delivery if available. Bring plenty of cooler space.
+            </p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="py-section-sm md:py-section-lg text-center">
+    <h2 class="text-2xl md:text-3xl font-semibold">Ready to reserve your share?</h2>
+    <p class="mt-2 text-black/70">Lock in your spot for the next butcher date.</p>
+    <div class="mt-5 flex justify-center gap-3">
+      <a href="/reserve" class="inline-flex items-center rounded-2xl bg-[#2F5D46] text-white px-5 py-2.5 hover:opacity-90">Reserve Now</a>
+      <a href="/beef-shares" class="inline-flex items-center rounded-2xl bg-white text-[#1C1C1C] px-5 py-2.5 border border-black/10 hover:bg-white/90">See Pricing</a>
+    </div>
+  </section>
+</Base>
+<style>
+    main{
+        padding:10px;
+    }
+    section{
+        padding:5px;
+        margin-top:5px;
+    }
+</style>

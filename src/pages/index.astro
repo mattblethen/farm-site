@@ -1,11 +1,287 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Base from "../layouts/Base.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+/**
+ * Home — "Pine Ridge Beef" demo
+ * CLS-safe: fixed image dimensions, no external fonts, minimal JS.
+ * Tailwind required.
+ */
+
+// Basic site constants (update url/contacts when you go live)
+const SITE = {
+  name: "Pine Ridge Beef",
+  url: "https://example.com", // TODO: replace with your domain
+  phone: "(859) 555-0123",
+  email: "hello@pineridgebeef.com",
+  street: "123 Farm Lane",
+  city: "Richmond",
+  region: "KY",
+  postal: "40475",
+  country: "US",
+  geo: { lat: 37.747, lng: -84.294 },
+};
+
+// Quick pricing examples used in cards (transparent math lives on /beef-shares)
+const PRICING = [
+  {
+    id: "quarter",
+    title: "¼ Share",
+    estTakehome: "105–120 lb",
+    freezer: "4–5 cu ft",
+    estTotal: "$900–$1,050",
+    link: "/reserve?share=quarter",
+  },
+  {
+    id: "half",
+    title: "½ Share",
+    estTakehome: "210–240 lb",
+    freezer: "8–10 cu ft",
+    estTotal: "$1,750–$2,050",
+    link: "/reserve?share=half",
+  },
+  {
+    id: "whole",
+    title: "Whole",
+    estTakehome: "420–480 lb",
+    freezer: "16–20 cu ft",
+    estTotal: "$3,400–$3,900",
+    link: "/reserve?share=whole",
+  },
+];
+
+// Image paths (generate & drop these into /public/images at these sizes)
+const IMAGES = {
+  heroDesktop: "/images/hero-cattle-2000x900.png",  // 2000×900
+  heroMobile:  "/images/hero-cattle-900x1200.png",  // 900×1200
+  testimonial1: "/images/customer-freezer-800x600.png", // 800×600
+};
+
+const pageTitle =
+  "Pine Ridge Beef — Farm-Raised Beef Shares (¼, ½ & Whole)";
+const pageDescription =
+  "Reserve farm-raised beef shares directly from Pine Ridge Beef in Richmond, KY. Transparent pricing for quarter, half, and whole cows. USDA processing, vacuum-sealed cuts, easy pickup.";
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<Base title={pageTitle} description={pageDescription} canonical={SITE.url}>
+  {/* JSON-LD schema can be in body; crawlers parse it fine */}
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: SITE.name,
+      image: [`${SITE.url}/images/hero-cattle-2000x900.png`],
+      telephone: SITE.phone,
+      email: SITE.email,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: SITE.street,
+        addressLocality: SITE.city,
+        addressRegion: SITE.region,
+        postalCode: SITE.postal,
+        addressCountry: SITE.country
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: SITE.geo.lat,
+        longitude: SITE.geo.lng
+      },
+      url: SITE.url,
+      sameAs: []
+    })}
+  </script>
+
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "OfferCatalog",
+      name: "Beef Shares",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          name: "Quarter Share",
+          url: `${SITE.url}/beef-shares#quarter`,
+          priceCurrency: "USD",
+          priceSpecification: { "@type": "PriceSpecification", price: "900-1050" },
+          availability: "https://schema.org/PreOrder"
+        },
+        {
+          "@type": "Offer",
+          name: "Half Share",
+          url: `${SITE.url}/beef-shares#half`,
+          priceCurrency: "USD",
+          priceSpecification: { "@type": "PriceSpecification", price: "1750-2050" },
+          availability: "https://schema.org/PreOrder"
+        },
+        {
+          "@type": "Offer",
+          name: "Whole",
+          url: `${SITE.url}/beef-shares#whole`,
+          priceCurrency: "USD",
+          priceSpecification: { "@type": "PriceSpecification", price: "3400-3900" },
+          availability: "https://schema.org/PreOrder"
+        }
+      ]
+    })}
+  </script>
+
+  <!-- HERO (CLS-safe: explicit sizes, no layout shift) -->
+  <section aria-label="Hero" class="relative">
+    <picture>
+      <!-- Mobile first -->
+      <source srcset={IMAGES.heroMobile} media="(max-width: 767px)" />
+      <img
+        src={IMAGES.heroDesktop}
+        alt="Cattle grazing on green pasture at Pine Ridge Beef"
+        width="2000"
+        height="900"
+        class="w-full h-auto block"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+
+    <!-- Gradient overlay for legibility -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent"></div>
+
+    <div class="absolute inset-0">
+      <div class="mx-auto max-w-[1200px] px-4 md:px-6 h-full flex items-end md:items-center pb-8 md:pb-0">
+        <div class="text-white max-w-2xl">
+          <h1 class="text-3xl md:text-5xl font-semibold leading-tight drop-shadow">
+            Farm-Raised Beef, Straight From Our Pasture.
+          </h1>
+          <p class="mt-3 md:mt-4 text-base md:text-lg text-white/90">
+            Reserve a quarter, half, or whole cow. Transparent pricing, no surprises.
+          </p>
+
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href="/beef-shares" class="inline-flex items-center rounded-2xl bg-[#2F5D46] text-white px-5 py-2.5 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#2F5D46]/60">
+              See Pricing
+            </a>
+            <a href="/reserve" class="inline-flex items-center rounded-2xl bg-white text-[#1C1C1C] px-5 py-2.5 hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/70">
+              Reserve a Share
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE CARDS -->
+  <section class="py-12 md:py-16">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <article class="rounded-2xl bg-[#F3EBDD] p-6 shadow-sm">
+          <h3 class="text-lg font-semibold">Grass-Fed Care</h3>
+          <p class="mt-2 text-sm text-black/70">
+            Pasture-raised with seasonal forage. Humane handling from start to finish.
+          </p>
+        </article>
+        <article class="rounded-2xl bg-[#F3EBDD] p-6 shadow-sm">
+          <h3 class="text-lg font-semibold">USDA Processing</h3>
+          <p class="mt-2 text-sm text-black/70">
+            Clean facilities, vacuum-sealed packages, labeled cuts for easy storage.
+          </p>
+        </article>
+        <article class="rounded-2xl bg-[#F3EBDD] p-6 shadow-sm">
+          <h3 class="text-lg font-semibold">Pickup & Delivery</h3>
+          <p class="mt-2 text-sm text-black/70">
+            Local pickup at the processor or affordable delivery options.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- MINI PRICING SNAPSHOT -->
+  <section class="py-4 md:py-6">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <div class="mb-4">
+        <h2 class="text-2xl md:text-3xl font-semibold">Simple, Transparent Pricing</h2>
+        <p class="mt-2 text-black/70">
+          No quote games—just clear math. Final totals depend on hanging weight and cut choices.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {PRICING.map((p) => (
+          <article class="rounded-2xl bg-white p-6 shadow-sm border border-black/5" id={`share-${p.id}`}>
+            <h3 class="text-lg font-semibold">{p.title}</h3>
+            <ul class="mt-3 text-sm text-black/80 space-y-1">
+              <li><strong>Est. take-home:</strong> {p.estTakehome}</li>
+              <li><strong>Freezer space:</strong> {p.freezer}</li>
+              <li><strong>Est. total:</strong> {p.estTotal}</li>
+            </ul>
+            <div class="mt-4 flex gap-3">
+              <a href="/beef-shares" class="text-[#2F5D46] underline underline-offset-4">Pricing details</a>
+              <a href={p.link} class="ml-auto inline-flex items-center rounded-2xl bg-[#2F5D46] text-white px-4 py-1.5 hover:opacity-90">
+                Reserve
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS (3 steps) -->
+  <section class="py-12 md:py-16">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <h2 class="text-2xl md:3xl font-semibold md:text-3xl">How It Works</h2>
+      <ol class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <li class="rounded-2xl bg-white p-6 shadow-sm border border-black/5">
+          <div class="text-sm uppercase tracking-wide text-black/60">Step 1</div>
+          <h3 class="mt-1 font-semibold">Reserve</h3>
+          <p class="mt-2 text-sm text-black/70">Choose ¼, ½, or whole. We’ll confirm the next butcher date.</p>
+        </li>
+        <li class="rounded-2xl bg-white p-6 shadow-sm border border-black/5">
+          <div class="text-sm uppercase tracking-wide text-black/60">Step 2</div>
+          <h3 class="mt-1 font-semibold">Butcher & Cuts</h3>
+          <p class="mt-2 text-sm text-black/70">Dry-aging, cut sheet choices, vacuum-sealed packaging.</p>
+        </li>
+        <li class="rounded-2xl bg-white p-6 shadow-sm border border-black/5">
+          <div class="text-sm uppercase tracking-wide text-black/60">Step 3</div>
+          <h3 class="mt-1 font-semibold">Pickup / Delivery</h3>
+          <p class="mt-2 text-sm text-black/70">Pick up at the processor or arrange delivery to your home.</p>
+        </li>
+      </ol>
+      <div class="mt-6">
+        <a href="/process" class="text-[#2F5D46] underline underline-offset-4">See the full process</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL (single static block for demo) -->
+  <section class="py-8 md:py-12">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-[1.1fr,0.9fr] gap-6 items-center rounded-2xl bg-[#F3EBDD] p-6">
+        <blockquote class="text-lg leading-relaxed">
+          “The best beef we’ve had—steaks are tender, and the ground beef is unreal. Transparent pricing made it easy.”
+          <footer class="mt-3 text-sm text-black/70">— Kenzie R., Richmond KY</footer>
+        </blockquote>
+
+        <!-- CLS-safe image with fixed size -->
+        <img
+          src={IMAGES.testimonial1}
+          alt="Customer freezer with neatly stacked vacuum-sealed beef packages"
+          width="800"
+          height="600"
+          class="w-full h-auto rounded-xl shadow-sm border border-black/5"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-12 md:py-16">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6 text-center">
+      <h2 class="text-2xl md:text-3xl font-semibold">Ready to reserve your share?</h2>
+      <p class="mt-2 text-black/70">Lock in your spot for the next butcher date.</p>
+      <div class="mt-5 flex justify-center gap-3">
+        <a href="/reserve" class="inline-flex items-center rounded-2xl bg-[#2F5D46] text-white px-5 py-2.5 hover:opacity-90">Reserve a Share</a>
+        <a href="/beef-shares" class="inline-flex items-center rounded-2xl bg-white text-[#1C1C1C] px-5 py-2.5 border border-black/10 hover:bg-white/90">See Pricing</a>
+      </div>
+    </div>
+  </section>
+</Base>

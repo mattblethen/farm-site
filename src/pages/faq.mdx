@@ -1,0 +1,189 @@
+---
+layout: ../layouts/Base.astro
+title: "Frequently Asked Questions — Pine Ridge Beef"
+description: "Answers to common questions about buying a quarter, half, or whole beef share from Pine Ridge Beef: pricing, cuts, freezer space, pickup/delivery, and more."
+canonical: "https://example.com/faq"
+---
+
+{/* Schema.org FAQPage — keep Q/A text in sync with the accordions below */}
+<script type="application/ld+json">
+{JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much freezer space do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "As a rule of thumb: 1/4 ≈ 4–5 cu ft, 1/2 ≈ 8–10 cu ft, whole ≈ 16–20 cu ft. Upright or chest freezers both work fine."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What’s the difference between hanging weight and take-home weight?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Hanging weight is the butcher’s weight after harvest. Take-home (finished) weight is typically 65–75% of hanging weight depending on your chosen cuts and trimming."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is pricing calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your total is farm price per lb of hanging weight + a slaughter fee (flat, split by share) + a per-lb cut & wrap fee. We publish example math on our Beef Shares page so there are no surprises."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I choose my cuts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. You’ll complete a cut sheet before processing to choose steak thickness, roast sizes, ground %, and whether to keep bones or organs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does the process take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Typically 4–8 weeks, depending on processor scheduling and dry-aging time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the beef grass-fed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our cattle are pasture-raised with seasonal forage. Finishing regimen (grass-finished or grain-finished) is described on our site and can vary by season."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is the meat packaged?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cuts are vacuum-sealed, labeled, and frozen for long storage life."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer delivery?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Local pickup at the processor is standard; limited local delivery may be available—contact us for current options."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What deposit is required?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Deposits are common to reserve a spot and are applied to your final total. See our Reserve page for current deposit info."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if I’m new to buying a share?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We’ll guide you through sizing, cut choices, and storage. Start with a quarter if you’re unsure—our examples help you estimate cost per finished pound."
+      }
+    }
+  ]
+})}
+</script>
+
+<section class="section">
+  <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+    <h1 class="text-3xl md:text-5xl font-semibold">Frequently Asked Questions</h1>
+    <p class="mt-4 text-lg max-w-2xl text-black/80">
+      Straight answers about beef shares, pricing, cuts, timelines, and storage. If you don’t see your question here,
+      <a href="/contact" class="text-pine underline underline-offset-4">contact us</a>.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="mx-auto max-w-[900px] px-4 md:px-6 space-y-4">
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">How much freezer space do I need?</summary>
+      <p class="mt-2 text-black/70">Rule of thumb: <strong>¼ = 4–5 cu ft</strong>, <strong>½ = 8–10 cu ft</strong>, <strong>whole = 16–20 cu ft</strong>. Chest or upright both work.</p>
+    </details>
+
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">What’s the difference between hanging weight and take-home weight?</summary>
+      <p class="mt-2 text-black/70">
+        <strong>Hanging weight</strong> is measured at the processor after harvest. <strong>Take-home</strong> (finished) weight is usually
+        <strong>65–75%</strong> of hanging weight, depending on trim and your cut choices.
+      </p>
+    </details>
+
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">How is pricing calculated?</summary>
+      <p class="mt-2 text-black/70">
+        Your total = <em>farm price × hanging weight</em> + slaughter fee (flat; split by share) + per-lb cut &amp; wrap.
+        See the full example math on our <a href="/beef-shares" class="text-pine underline underline-offset-4">Beef Shares</a> page.
+      </p>
+    </details>
+
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">Can I choose my cuts?</summary>
+      <p class="mt-2 text-black/70">
+        Yes—before processing you complete a <em>cut sheet</em> (steak thickness, roast sizes, grind %, soup bones, organs, etc.).
+      </p>
+    </details>
+
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">How long does the process take?</summary>
+      <p class="mt-2 text-black/70">
+        Plan on <strong>4–8 weeks</strong> depending on processor scheduling and dry-aging time.
+      </p>
+    </details>
+
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">Is the beef grass-fed?</summary>
+      <p class="mt-2 text-black/70">
+        Our cattle are pasture-raised with seasonal forage. We note finishing regimen (grass- or grain-finished) on our site and it can vary by season.
+      </p>
+    </details>
+
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">How is the meat packaged?</summary>
+      <p class="mt-2 text-black/70">
+        Vacuum-sealed, labeled cuts—frozen and ready for long storage.
+      </p>
+    </details>
+
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">Do you offer delivery?</summary>
+      <p class="mt-2 text-black/70">
+        Local pickup at the processor is standard; limited local delivery may be available. <a href="/contact" class="text-pine underline underline-offset-4">Ask us</a> for current options.
+      </p>
+    </details>
+
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">What deposit is required?</summary>
+      <p class="mt-2 text-black/70">
+        Deposits help reserve your spot and are applied to your final total. See <a href="/reserve" class="text-pine underline underline-offset-4">Reserve</a> for current deposit info.
+      </p>
+    </details>
+
+    <details class="rounded-lg bg-white p-4 border border-black/10">
+      <summary class="cursor-pointer font-medium">What if I’m new to buying a share?</summary>
+      <p class="mt-2 text-black/70">
+        We’ll guide you through sizing, cuts, and storage. Many first-timers start with a <a href="/beef-shares#quarter" class="text-pine underline underline-offset-4">quarter share</a>.
+      </p>
+    </details>
+  </div>
+</section>
+
+<section class="section text-center">
+  <h2 class="text-2xl md:text-3xl font-semibold">Still have questions?</h2>
+  <p class="mt-2 text-black/70">We’re happy to help with cut sheets, storage, or anything else.</p>
+  <div class="mt-5 flex justify-center gap-3">
+    <a href="/reserve" class="inline-flex items-center rounded-2xl bg-pine text-white px-5 py-2.5 hover:opacity-90">Reserve a Share</a>
+    <a href="/contact" class="inline-flex items-center rounded-2xl bg-white text-ink px-5 py-2.5 border border-black/10 hover:bg-white/90">Contact Us</a>
+  </div>
+</section>
