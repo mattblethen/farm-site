@@ -1,0 +1,218 @@
+---
+import Base from "../layouts/Base.astro";
+
+const SITE = { url: "https://example.com", name: "Pine Ridge Beef" };
+
+const title = "Gallery — Pasture, Processing & Freezer | Pine Ridge Beef";
+const description =
+  "See our pasture, herd, and finished beef packaging. Realistic, transparent look at what to expect when you reserve a quarter, half, or whole share.";
+
+/**
+ * Define gallery items once.
+ * Make sure files exist in /public/images/gallery/ with these exact names/sizes.
+ */
+const ITEMS = [
+  {
+    id: "pasture-1",
+    alt: "Cattle grazing in green pasture at sunset",
+    thumb: "/images/gallery/pasture-1-600x400.png",
+    full: "/images/gallery/pasture-1-1600x1067.png",
+    w: 600, h: 400, W: 1600, H: 1067,
+  },
+  {
+    id: "pasture-2",
+    alt: "Rotational grazing paddock with temporary fencing",
+    thumb: "/images/gallery/pasture-2-600x400.png",
+    full: "/images/gallery/pasture-2-1600x1067.png",
+    w: 600, h: 400, W: 1600, H: 1067,
+  },
+  {
+    id: "herd-1",
+    alt: "Calm herd near a tree line with blue sky",
+    thumb: "/images/gallery/herd-1-600x400.png",
+    full: "/images/gallery/herd-1-1600x1067.png",
+    w: 600, h: 400, W: 1600, H: 1067,
+  },
+  {
+    id: "processor-1",
+    alt: "USDA processor exterior with loading bay",
+    thumb: "/images/gallery/processor-1-600x400.png",
+    full: "/images/gallery/processor-1-1600x1067.png",
+    w: 600, h: 400, W: 1600, H: 1067,
+  },
+  {
+    id: "packaging-1",
+    alt: "Vacuum-sealed steaks with clear labels",
+    thumb: "/images/gallery/packaging-1-600x400.png",
+    full: "/images/gallery/packaging-1-1600x1067.png",
+    w: 600, h: 400, W: 1600, H: 1067,
+  },
+  {
+    id: "freezer-1",
+    alt: "Chest freezer neatly organized with labeled packages",
+    thumb: "/images/gallery/freezer-1-600x400.png",
+    full: "/images/gallery/freezer-1-1600x1067.png",
+    w: 600, h: 400, W: 1600, H: 1067,
+  },
+];
+---
+
+<Base title={title} description={description} canonical={`${SITE.url}/gallery`}>
+  <!-- SEO: Image gallery / ItemList -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Pine Ridge Beef Gallery",
+      "itemListElement": ITEMS.map((it, i) => ({
+        "@type": "ImageObject",
+        "position": i + 1,
+        "contentUrl": `${SITE.url}${it.full}`,
+        "thumbnailUrl": `${SITE.url}${it.thumb}`,
+        "caption": it.alt
+      }))
+    })}
+  </script>
+
+  <style>
+    /* Open/close behavior */
+    .lb { opacity: 0; pointer-events: none; }
+    .lb:target { opacity: 1; pointer-events: auto; }
+
+    /* Fullscreen overlay, scrolls if content is taller than viewport */
+    .lb {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: rgba(0,0,0,.8);
+      overflow: auto; /* allow scrolling inside overlay */
+    }
+
+    /* Center content with safe padding so close button & caption fit */
+    .lb__inner {
+      min-height: 100%;
+      display: flex;
+      align-items: center;  /* vertical center when it fits */
+      justify-content: center;
+      padding: 4rem 1rem;   /* top/btm room for caption/close */
+    }
+
+    /* Constrain figure to viewport */
+    .lb__figure {
+      width: min(90vw, 1100px);
+    }
+
+    /* Fit image within viewport height accounting for padding */
+    .lb__img {
+      width: 100%;
+      height: auto;
+      max-height: calc(100vh - 8rem);  /* never taller than screen */
+      object-fit: contain;              /* letterbox if needed */
+      border-radius: .75rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.1);
+      display: block;
+    }
+
+    .lb__caption {
+      color: rgba(255,255,255,.9);
+      text-align: center;
+      font-size: .95rem;
+      margin-top: .75rem;
+      padding: 0 .5rem;
+    }
+
+    /* Close button sits in safe top-right and stays tappable */
+    .lb__close {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      color: rgba(255,255,255,.9);
+      font-size: 2rem;
+      line-height: 1;
+      text-decoration: none;
+    }
+
+    /* Make the backdrop area outside figure clickable to close */
+    .lb__backdrop {
+      position: fixed;
+      inset: 0;
+    }
+
+    /* Minor reset for gallery section images (optional) */
+    section img { border-radius: 0; margin: 0; }
+
+    @media (min-width: 768px) {
+      .lb__inner { padding: 5rem 2rem; }
+      .lb__img { max-height: calc(100vh - 10rem); }
+    }
+    .galleryImg{
+            width: 100%;
+    height: auto;
+    max-height: calc(100vh - 8rem);
+    object-fit: contain;
+    object-fit: contain;
+    border-radius: .75rem;
+    padding:10px;
+    display: block;
+    }
+    .lb{
+        overflow:hidden;
+    }
+  </style>
+
+  <section class="section">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <h1 class="text-3xl md:text-5xl font-semibold">Gallery</h1>
+      <p class="mt-4 text-lg max-w-2xl text-black/80">
+        A look at our pasture, herd, and finished beef packaging—so you know exactly what to expect.
+      </p>
+    </div>
+  </section>
+
+  <!-- Grid -->
+  <section class="section">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <ul class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+        {ITEMS.map((it) => (
+          <li class="group">
+            <a href={`#${it.id}`} class="block rounded-xl overflow-hidden border border-black/10 bg-white">
+              <img
+                src={it.thumb}
+                alt={it.alt}
+                width={it.w}
+                height={it.h}
+                loading="lazy"
+                decoding="async"
+                class="w-full h-auto transition-transform duration-200 group-hover:scale-[1.02]"
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Lightboxes (CSS :target) -->
+  {ITEMS.map((it) => (
+    <div id={it.id} class="lb">
+      <a href="#close" class="lb__backdrop" aria-label="Close lightbox"></a>
+      <a href="#close" aria-label="Close" class="lb__close">×</a>
+
+      <div class="lb__inner">
+        <figure class="lb__figure">
+          <img
+            src={it.full}
+            alt={it.alt}
+            width={it.W}
+            height={it.H}
+            loading="eager"
+            fetchpriority="high"
+            class="galleryImg"
+          />
+          <figcaption class="lb__caption">{it.alt}</figcaption>
+        </figure>
+      </div>
+    </div>
+  ))}
+</Base>
