@@ -1,0 +1,74 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const SITE = { url: "https://example.com", name: "Pine Ridge Beef" };
+const title = "Message Received — Pine Ridge Beef";
+const description = "Thanks for contacting Pine Ridge Beef. We’ll reply shortly.";
+
+// Read query params
+const q = Astro.url.searchParams;
+const name = q.get("name") || "Friend";
+const email = q.get("email") || "";
+const phone = q.get("phone") || "";
+const topic = q.get("topic") || "general";
+const message = q.get("message") || "";
+const honeypot = q.get("website") || "";
+---
+
+<Base title={title} description={description} canonical={`${SITE.url}/contact/sent`}>
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: title,
+      description,
+      url: `${SITE.url}/contact/sent`,
+    })}
+  </script>
+
+  <section class="section">
+    <div class="mx-auto max-w-[900px] px-4 md:px-6 rounded-2xl bg-white border border-black/5 shadow-sm p-6 md:p-8">
+      <h1 class="text-3xl md:text-4xl font-semibold">Thanks, {name}! 👋</h1>
+      <p class="mt-3 text-black/80">
+        We’ve recorded your message. This demo does not send email, but here’s a copy of what you submitted:
+      </p>
+
+      {honeypot && (
+        <p class="mt-3 text-sm text-red-600">
+          (Heads-up: your submission triggered a spam filter and may not be processed automatically.)
+        </p>
+      )}
+
+      <div class="mt-6">
+        <h2 class="text-xl font-semibold">Message Summary</h2>
+        <dl class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+          <div>
+            <dt class="text-black/60">Topic</dt>
+            <dd class="font-medium capitalize">{topic}</dd>
+          </div>
+          <div>
+            <dt class="text-black/60">Email</dt>
+            <dd class="font-medium break-words">{email || "—"}</dd>
+          </div>
+          <div>
+            <dt class="text-black/60">Phone</dt>
+            <dd class="font-medium">{phone || "—"}</dd>
+          </div>
+          <div class="sm:col-span-2">
+            <dt class="text-black/60">Message</dt>
+            <dd class="font-medium whitespace-pre-wrap">{message || "—"}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/beef-shares" class="inline-flex items-center rounded-2xl bg-pine text-white px-5 py-2.5 hover:opacity-90">See Pricing</a>
+        <a href="/reserve" class="inline-flex items-center rounded-2xl border border-black/10 bg-white px-5 py-2.5 hover:bg-white/90">Reserve a Share</a>
+      </div>
+
+      <p class="mt-6 text-xs text-black/50">
+        In production, you could wire this form to Netlify Forms, Formspree, or a serverless function while keeping this page as the thank-you screen.
+      </p>
+    </div>
+  </section>
+</Base>
