@@ -1,5 +1,11 @@
 ---
 import Base from "../layouts/Base.astro";
+import Img from "../components/Img.astro";
+
+// STATIC IMAGE IMPORTS (must live in /src/assets)
+import shareQuarter from "../assets/share-quarter-800x600.png";
+import shareHalf from "../assets/share-half-800x600.png";
+import shareWhole from "../assets/share-whole-800x600.png";
 
 const SITE = {
   url: "https://example.com",
@@ -24,7 +30,7 @@ const SHARES = [
     cutWrap: 1.1,
     yield: "65–75%",
     estTotal: "$900–$1,050",
-    image: "/images/share-quarter-800x600.png",
+    image: shareQuarter, // imported module
   },
   {
     id: "half",
@@ -37,7 +43,7 @@ const SHARES = [
     cutWrap: 1.1,
     yield: "65–75%",
     estTotal: "$1,750–$2,050",
-    image: "/images/share-half-800x600.png",
+    image: shareHalf,
   },
   {
     id: "whole",
@@ -50,7 +56,7 @@ const SHARES = [
     cutWrap: 1.1,
     yield: "65–75%",
     estTotal: "$3,400–$3,900",
-    image: "/images/share-whole-800x600.png",
+    image: shareWhole,
   },
 ];
 ---
@@ -62,7 +68,8 @@ const SHARES = [
       "@type": "Product",
       name: "Farm-Raised Beef Shares",
       description,
-      image: [`${SITE.url}/images/share-quarter-800x600.png`],
+      // Use an optimized URL for the main image (quarter as example)
+      image: [new URL(shareQuarter.src, SITE.url).toString()],
       brand: { "@type": "Brand", name: SITE.name },
       offers: SHARES.map((s) => ({
         "@type": "Offer",
@@ -74,6 +81,7 @@ const SHARES = [
         },
         availability: "https://schema.org/PreOrder",
         url: `${SITE.url}/reserve?share=${s.id}`,
+        image: new URL(s.image.src, SITE.url).toString(),
       })),
     })}
   </script>
@@ -94,15 +102,19 @@ const SHARES = [
     <div class="mx-auto max-w-[1200px] px-4 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
       {SHARES.map((s) => (
         <article id={s.id} class="rounded-2xl bg-white shadow-sm border border-black/5 overflow-hidden flex flex-col">
-          <img
-            src={s.image}
-            alt={`${s.name} beef share example packaging`}
-            width="800"
-            height="600"
-            class="w-full h-auto"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="w-full">
+            <Img
+              src={s.image}
+              alt={`${s.name} beef share example packaging`}
+              /* 1200px container, 3 cols, ~24px gaps → ≈384px rendered on desktop */
+              sizes="(min-width: 1200px) 384px, (min-width: 768px) 45vw, 100vw"
+              widths={[320, 384, 480, 640, 800]}
+              quality={70}
+              format="webp"
+              class="w-full h-auto"
+            />
+          </div>
+
           <div class="p-6 flex flex-col flex-grow">
             <h2 class="text-xl font-semibold">{s.name}</h2>
             <ul class="mt-3 text-sm text-black/80 space-y-1">
@@ -110,7 +122,7 @@ const SHARES = [
               <li><strong>Freezer space:</strong> {s.freezer}</li>
               <li><strong>Hanging weight:</strong> ~{s.hanging} lb</li>
               <li><strong>Farm price:</strong> ${s.pricePerLb.toFixed(2)}/lb hanging</li>
-              <li><strong>Slaughter fee (split):</strong> ${(s.slaughterFee / 4).toFixed(2)} for quarter, ${(s.slaughterFee / 2).toFixed(2)} for half, {s.slaughterFee} for whole</li>
+              <li><strong>Slaughter fee (split):</strong> {(s.slaughterFee / 4).toFixed(2)} for quarter, {(s.slaughterFee / 2).toFixed(2)} for half, {s.slaughterFee} for whole</li>
               <li><strong>Cut & wrap:</strong> ${s.cutWrap.toFixed(2)}/lb hanging</li>
               <li><strong>Yield:</strong> {s.yield}</li>
             </ul>

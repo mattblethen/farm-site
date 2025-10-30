@@ -15,10 +15,9 @@
     padding:10px;
   }
 }
-.section img{
-    margin-top:5px;
-    margin-bottom:10px;
-    border-radius:25px;
+.about img{
+    margin: 25px 0;
+    border-radius:1rem;
 }
 /* (Optional) If you still want universal spacing without adding .section everywhere:
    Keep this plain CSS too; it coexists fine. */

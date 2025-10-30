@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200" viewBox="0 0 600 200">
+  <rect width="600" height="200" fill="transparent"/>
+  <!-- Pine tree icon -->
+  <polygon points="300,40 280,80 320,80" fill="#2F5D46"/>
+  <polygon points="300,60 270,110 330,110" fill="#2F5D46"/>
+  <polygon points="300,85 260,140 340,140" fill="#2F5D46"/>
+  <rect x="295" y="140" width="10" height="25" fill="#2F5D46"/>
+  <!-- Wordmark -->
+  <text x="360" y="130" font-family="serif" font-size="46" fill="#1C1C1C" font-weight="600" letter-spacing="1">
+    Pine Ridge
+  </text>
+  <text x="360" y="165" font-family="serif" font-size="28" fill="#2F5D46" letter-spacing="3">
+    BEEF
+  </text>
+</svg>

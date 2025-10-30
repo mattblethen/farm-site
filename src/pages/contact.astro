@@ -1,5 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
+import Img from "../components/Img.astro";
+
+// STATIC IMAGE IMPORT
+import farmMap from "../assets/farm-map.png";
 
 const SITE = {
   url: "https://example.com",
@@ -68,16 +72,18 @@ const description =
           <li><strong>Hours:</strong> Mon–Sat 9am–6pm (call ahead)</li>
         </ul>
 
-        <!-- Static map/image placeholder (CLS-safe) -->
-        <img
-          src="/images/farm-map.png"
-          alt="Map area near the farm and processor location"
-          width="1200"
-          height="600"
-          class="mt-5 w-full h-auto rounded-xl border border-black/10"
-          loading="lazy"
-          decoding="async"
-        />
+        <!-- Optimized static map image -->
+        <div class="mt-5 w-full rounded-xl border border-black/10 overflow-hidden">
+          <Img
+            src={farmMap}
+            alt="Map area near the farm and processor location"
+            sizes="(min-width: 1200px) 620px, (min-width: 768px) 60vw, 100vw"
+            widths={[480, 620, 800, 1000, 1200]}
+            quality={70}
+            format="webp"
+            class="w-full h-auto block"
+          />
+        </div>
       </aside>
 
       <!-- Contact form (GET → confirmation page) -->

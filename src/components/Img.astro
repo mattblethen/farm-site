@@ -1,0 +1,51 @@
+---
+/* If you're on astro:assets */
+import { Image } from "astro:assets";
+
+/**
+ * Props:
+ * - src (required): imported image from /src/assets
+ * - alt (required): string
+ * - widths: number[]
+ * - sizes: string
+ * - quality: number
+ * - format: 'webp' | 'avif' | 'jpeg' | 'png'  (singular!)
+ * - fit: 'cover' | 'contain' | 'fill' | 'inside' | 'outside'
+ * - loading: 'lazy' | 'eager'
+ * - decoding: 'async' | 'auto' | 'sync'
+ * - priority: boolean (adds eager + fetchpriority)
+ * - class/style: passthrough
+ */
+const {
+  src,
+  alt,
+  widths = [320, 480, 640, 768, 1024, 1280, 1600],
+  sizes = "100vw",
+  quality = 68,
+  format = "webp", // NOTE: singular 'format' (not 'formats')
+  fit = "cover",
+  loading = "lazy",
+  decoding = "async",
+  priority = false,
+  class: className = "",
+  style = "",
+} = Astro.props;
+
+const effectiveLoading = priority ? "eager" : loading;
+const fetchpriority = priority ? "high" : undefined;
+---
+
+<Image
+  src={src}
+  alt={alt}
+  widths={widths}
+  sizes={sizes}
+  quality={quality}
+  fit={fit}
+  format={format}
+  loading={effectiveLoading}
+  decoding={decoding}
+  class={className}
+  style={style}
+  fetchpriority={fetchpriority}
+/>

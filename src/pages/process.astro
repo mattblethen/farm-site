@@ -1,7 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
+import Img from "../components/Img.astro";
 
-// Basic site constants (tweak when live)
+// Site constants
 const SITE = {
   url: "https://example.com",
   name: "Pine Ridge Beef",
@@ -12,14 +13,22 @@ const title = "How It Works — From Pasture to Freezer | Pine Ridge Beef";
 const description =
   "See exactly how buying a quarter, half, or whole beef share works—reservation, butcher date, cut sheet, dry-aging, final weights, and pickup or delivery.";
 
-// Static images (add these files to /public/images/ with exact sizes)
+// Static image imports (must live in /src/assets)
+import imgReserve from "../assets/process-reserve-1200x600.png";
+import imgButcher from "../assets/process-butcher-1200x600.png";
+import imgCutSheet from "../assets/process-cutsheet-1200x600.png";
+import imgAging from "../assets/process-aging-1200x600.png";
+import imgWeighing from "../assets/process-weight-1200x600.png";
+import imgPickup from "../assets/process-pickup-1200x600.png";
+
+// Helpful map for templating
 const IMG = {
-  reserve: "/images/process-reserve-1200x600.png",
-  butcher: "/images/process-butcher-1200x600.png",
-  cutsheet: "/images/process-cutsheet-1200x600.png",
-  aging: "/images/process-aging-1200x600.png",
-  weighing: "/images/process-weight-1200x600.png",
-  pickup: "/images/process-pickup-1200x600.png",
+  reserve: imgReserve,
+  butcher: imgButcher,
+  cutsheet: imgCutSheet,
+  aging: imgAging,
+  weighing: imgWeighing,
+  pickup: imgPickup,
 };
 ---
 
@@ -29,54 +38,52 @@ const IMG = {
     {JSON.stringify({
       "@context": "https://schema.org",
       "@type": "HowTo",
-      "name": "How to Reserve a Beef Share",
-      "description": description,
-      "totalTime": "P4W", // typical 4–8 weeks; conservative example
-      "supply": [
-        { "@type": "HowToSupply", "name": "Reservation deposit (if applicable)" },
-        { "@type": "HowToSupply", "name": "Cut sheet preferences" },
-        { "@type": "HowToSupply", "name": "Freezer space" }
+      name: "How to Reserve a Beef Share",
+      description,
+      totalTime: "P4W", // typical 4–8 weeks; conservative example
+      supply: [
+        { "@type": "HowToSupply", name: "Reservation deposit (if applicable)" },
+        { "@type": "HowToSupply", name: "Cut sheet preferences" },
+        { "@type": "HowToSupply", name: "Freezer space" }
       ],
-      "tool": [
-        { "@type": "HowToTool", "name": "USDA processor" }
-      ],
-      "step": [
+      tool: [{ "@type": "HowToTool", name: "USDA processor" }],
+      step: [
         {
           "@type": "HowToStep",
-          "name": "Reserve your share",
-          "url": `${SITE.url}/reserve`,
-          "image": `${SITE.url}${IMG.reserve}`,
-          "text": "Choose ¼, ½, or whole. We’ll confirm the next butcher date."
+          name: "Reserve your share",
+          url: `${SITE.url}/reserve`,
+          image: new URL(IMG.reserve.src, SITE.url).toString(),
+          text: "Choose ¼, ½, or whole. We’ll confirm the next butcher date."
         },
         {
           "@type": "HowToStep",
-          "name": "Butcher date scheduled",
-          "image": `${SITE.url}${IMG.butcher}`,
-          "text": "We assign your animal to an upcoming processor date."
+          name: "Butcher date scheduled",
+          image: new URL(IMG.butcher.src, SITE.url).toString(),
+          text: "We assign your animal to an upcoming processor date."
         },
         {
           "@type": "HowToStep",
-          "name": "Complete your cut sheet",
-          "image": `${SITE.url}${IMG.cutsheet}`,
-          "text": "Pick steak thickness, roast sizes, ground %, keep bones/organs, etc."
+          name: "Complete your cut sheet",
+          image: new URL(IMG.cutsheet.src, SITE.url).toString(),
+          text: "Pick steak thickness, roast sizes, ground %, keep bones/organs, etc."
         },
         {
           "@type": "HowToStep",
-          "name": "Dry-aging & processing",
-          "image": `${SITE.url}${IMG.aging}`,
-          "text": "Beef typically dry-ages before being cut, labeled, and vacuum-sealed."
+          name: "Dry-aging & processing",
+          image: new URL(IMG.aging.src, SITE.url).toString(),
+          text: "Beef typically dry-ages before being cut, labeled, and vacuum-sealed."
         },
         {
           "@type": "HowToStep",
-          "name": "Final weight & invoice",
-          "image": `${SITE.url}${IMG.weighing}`,
-          "text": "We share hanging weights and the final calculation before pickup."
+          name: "Final weight & invoice",
+          image: new URL(IMG.weighing.src, SITE.url).toString(),
+          text: "We share hanging weights and the final calculation before pickup."
         },
         {
           "@type": "HowToStep",
-          "name": "Pickup or delivery",
-          "image": `${SITE.url}${IMG.pickup}`,
-          "text": "Meet at the processor for pickup or schedule local delivery."
+          name: "Pickup or delivery",
+          image: new URL(IMG.pickup.src, SITE.url).toString(),
+          text: "Meet at the processor for pickup or schedule local delivery."
         }
       ]
     })}
@@ -98,15 +105,18 @@ const IMG = {
       <!-- Step 1 -->
       <article id="step-reserve" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-2">
-          <img
-            src={IMG.reserve}
-            alt="Online reservation for beef share"
-            width="1200"
-            height="600"
-            class="w-full h-auto"
-            loading="eager"
-            fetchpriority="high"
-          />
+          <div class="w-full">
+            <Img
+              src={IMG.reserve}
+              alt="Online reservation for beef share"
+              sizes="(min-width: 1024px) 600px, 100vw"
+              widths={[560, 600, 800, 1000, 1200]}
+              quality={70}
+              format="webp"
+              priority={true}
+              class="w-full h-auto"
+            />
+          </div>
           <div class="p-6 md:p-8">
             <div class="text-sm uppercase tracking-wide text-black/60">Step 1</div>
             <h2 class="mt-1 text-2xl font-semibold">Reserve your share</h2>
@@ -124,15 +134,17 @@ const IMG = {
       <!-- Step 2 -->
       <article id="step-butcher" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-2">
-          <img
-            src={IMG.butcher}
-            alt="USDA processor scheduling"
-            width="1200"
-            height="600"
-            class="w-full h-auto"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="w-full">
+            <Img
+              src={IMG.butcher}
+              alt="USDA processor scheduling"
+              sizes="(min-width: 1024px) 600px, 100vw"
+              widths={[560, 600, 800, 1000, 1200]}
+              quality={70}
+              format="webp"
+              class="w-full h-auto"
+            />
+          </div>
           <div class="p-6 md:p-8">
             <div class="text-sm uppercase tracking-wide text-black/60">Step 2</div>
             <h2 class="mt-1 text-2xl font-semibold">Butcher date scheduled</h2>
@@ -146,15 +158,17 @@ const IMG = {
       <!-- Step 3 -->
       <article id="step-cutsheet" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-2">
-          <img
-            src={IMG.cutsheet}
-            alt="Customer filling out a meat cut sheet"
-            width="1200"
-            height="600"
-            class="w-full h-auto"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="w-full">
+            <Img
+              src={IMG.cutsheet}
+              alt="Customer filling out a meat cut sheet"
+              sizes="(min-width: 1024px) 600px, 100vw"
+              widths={[560, 600, 800, 1000, 1200]}
+              quality={70}
+              format="webp"
+              class="w-full h-auto"
+            />
+          </div>
           <div class="p-6 md:p-8">
             <div class="text-sm uppercase tracking-wide text-black/60">Step 3</div>
             <h2 class="mt-1 text-2xl font-semibold">Complete your cut sheet</h2>
@@ -168,15 +182,17 @@ const IMG = {
       <!-- Step 4 -->
       <article id="step-aging" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-2">
-          <img
-            src={IMG.aging}
-            alt="Beef dry-aging in a cold room"
-            width="1200"
-            height="600"
-            class="w-full h-auto"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="w-full">
+            <Img
+              src={IMG.aging}
+              alt="Beef dry-aging in a cold room"
+              sizes="(min-width: 1024px) 600px, 100vw"
+              widths={[560, 600, 800, 1000, 1200]}
+              quality={70}
+              format="webp"
+              class="w-full h-auto"
+            />
+          </div>
           <div class="p-6 md:p-8">
             <div class="text-sm uppercase tracking-wide text-black/60">Step 4</div>
             <h2 class="mt-1 text-2xl font-semibold">Dry-aging & processing</h2>
@@ -190,15 +206,17 @@ const IMG = {
       <!-- Step 5 -->
       <article id="step-weight" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-2">
-          <img
-            src={IMG.weighing}
-            alt="Butcher scale showing hanging weight"
-            width="1200"
-            height="600"
-            class="w-full h-auto"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="w-full">
+            <Img
+              src={IMG.weighing}
+              alt="Butcher scale showing hanging weight"
+              sizes="(min-width: 1024px) 600px, 100vw"
+              widths={[560, 600, 800, 1000, 1200]}
+              quality={70}
+              format="webp"
+              class="w-full h-auto"
+            />
+          </div>
           <div class="p-6 md:p-8">
             <div class="text-sm uppercase tracking-wide text-black/60">Step 5</div>
             <h2 class="mt-1 text-2xl font-semibold">Final weight & invoice</h2>
@@ -212,15 +230,17 @@ const IMG = {
       <!-- Step 6 -->
       <article id="step-pickup" class="rounded-2xl bg-white border border-black/5 shadow-sm overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-2">
-          <img
-            src={IMG.pickup}
-            alt="Customer loading labeled beef boxes at processor"
-            width="1200"
-            height="600"
-            class="w-full h-auto"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="w-full">
+            <Img
+              src={IMG.pickup}
+              alt="Customer loading labeled beef boxes at processor"
+              sizes="(min-width: 1024px) 600px, 100vw"
+              widths={[560, 600, 800, 1000, 1200]}
+              quality={70}
+              format="webp"
+              class="w-full h-auto"
+            />
+          </div>
           <div class="p-6 md:p-8">
             <div class="text-sm uppercase tracking-wide text-black/60">Step 6</div>
             <h2 class="mt-1 text-2xl font-semibold">Pickup or delivery</h2>
@@ -243,12 +263,8 @@ const IMG = {
     </div>
   </section>
 </Base>
+
 <style>
-    main{
-        padding:10px;
-    }
-    section{
-        padding:5px;
-        margin-top:5px;
-    }
+  main { padding:10px; }
+  section { padding:5px; margin-top:5px; }
 </style>

@@ -1,5 +1,11 @@
 ---
 import Base from "../layouts/Base.astro";
+import Img from "../components/Img.astro";
+
+// STATIC IMAGE IMPORTS (must live in /src/assets)
+import heroDesktop from "../assets/hero-cattle-2000x900.png";
+import heroMobile from "../assets/hero-cattle-900x1200.png";
+import testimonial1 from "../assets/customer-freezer-800x600.png";
 
 /**
  * Home — "Pine Ridge Beef" demo
@@ -49,13 +55,6 @@ const PRICING = [
   },
 ];
 
-// Image paths (generate & drop these into /public/images at these sizes)
-const IMAGES = {
-  heroDesktop: "/images/hero-cattle-2000x900.png",  // 2000×900
-  heroMobile:  "/images/hero-cattle-900x1200.png",  // 900×1200
-  testimonial1: "/images/customer-freezer-800x600.png", // 800×600
-};
-
 const pageTitle =
   "Pine Ridge Beef — Farm-Raised Beef Shares (¼, ½ & Whole)";
 const pageDescription =
@@ -69,7 +68,7 @@ const pageDescription =
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       name: SITE.name,
-      image: [`${SITE.url}/images/hero-cattle-2000x900.png`],
+      image: [new URL(heroDesktop.src, SITE.url).toString()], // use optimized asset URL
       telephone: SITE.phone,
       email: SITE.email,
       address: {
@@ -124,24 +123,38 @@ const pageDescription =
     })}
   </script>
 
-  <!-- HERO (CLS-safe: explicit sizes, no layout shift) -->
+  <!-- HERO (CLS-safe; use art-direction via visibility classes) -->
   <section aria-label="Hero" class="relative">
-    <picture>
-      <!-- Mobile first -->
-      <source srcset={IMAGES.heroMobile} media="(max-width: 767px)" />
-      <img
-        src={IMAGES.heroDesktop}
+    <!-- Desktop crop (md and up) -->
+    <div class="hidden md:block">
+      <Img
+        src={heroDesktop}
         alt="Cattle grazing on green pasture at Pine Ridge Beef"
-        width="2000"
-        height="900"
+        sizes="(min-width: 1200px) 1200px, 100vw"
+        widths={[640, 768, 1024, 1280, 1600, 2000]}
+        quality={70}
+        format="webp"
+        priority={true}
         class="w-full h-auto block"
-        loading="eager"
-        fetchpriority="high"
       />
-    </picture>
+    </div>
+
+    <!-- Mobile crop (below md) -->
+    <div class="md:hidden">
+      <Img
+        src={heroMobile}
+        alt="Cattle grazing on green pasture at Pine Ridge Beef"
+        sizes="100vw"
+        widths={[360, 480, 640, 768, 900, 1080]}
+        quality={70}
+        format="webp"
+        priority={true}
+        class="w-full h-auto block"
+      />
+    </div>
 
     <!-- Gradient overlay for legibility -->
-    <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent pointer-events-none"></div>
 
     <div class="absolute inset-0">
       <div class="mx-auto max-w-[1200px] px-4 md:px-6 h-full flex items-end md:items-center pb-8 md:pb-0">
@@ -250,7 +263,7 @@ const pageDescription =
     </div>
   </section>
 
-  <!-- TESTIMONIAL (single static block for demo) -->
+  <!-- TESTIMONIAL -->
   <section class="py-8 md:py-12">
     <div class="mx-auto max-w-[1200px] px-4 md:px-6">
       <div class="grid grid-cols-1 md:grid-cols-[1.1fr,0.9fr] gap-6 items-center rounded-2xl bg-[#F3EBDD] p-6">
@@ -259,16 +272,17 @@ const pageDescription =
           <footer class="mt-3 text-sm text-black/70">— Kenzie R., Richmond KY</footer>
         </blockquote>
 
-        <!-- CLS-safe image with fixed size -->
-        <img
-          src={IMAGES.testimonial1}
-          alt="Customer freezer with neatly stacked vacuum-sealed beef packages"
-          width="800"
-          height="600"
-          class="w-full h-auto rounded-xl shadow-sm border border-black/5"
-          loading="lazy"
-          decoding="async"
-        />
+        <div class="w-full">
+          <Img
+            src={testimonial1}
+            alt="Customer freezer with neatly stacked vacuum-sealed beef packages"
+            sizes="(min-width: 1024px) 540px, 100vw"
+            widths={[400, 540, 640, 800]}
+            quality={68}
+            format="webp"
+            class="w-full h-auto rounded-xl shadow-sm border border-black/5"
+          />
+        </div>
       </div>
     </div>
   </section>

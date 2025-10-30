@@ -1,59 +1,34 @@
 ---
 import Base from "../layouts/Base.astro";
+import Img from "../components/Img.astro";
+
+// STATIC IMPORTS (Astro will generate optimized variants)
+import pasture1Thumb from "../assets/gallery/pasture-1-600x400.png";
+import pasture1Full from "../assets/gallery/pasture-1-1600x1067.png";
+import pasture2Thumb from "../assets/gallery/pasture-2-600x400.png";
+import pasture2Full from "../assets/gallery/pasture-2-1600x1067.png";
+import herd1Thumb from "../assets/gallery/herd-1-600x400.png";
+import herd1Full from "../assets/gallery/herd-1-1600x1067.png";
+import processor1Thumb from "../assets/gallery/processor-1-600x400.png";
+import processor1Full from "../assets/gallery/processor-1-1600x1067.png";
+import packaging1Thumb from "../assets/gallery/packaging-1-600x400.png";
+import packaging1Full from "../assets/gallery/packaging-1-1600x1067.png";
+import freezer1Thumb from "../assets/gallery/freezer-1-600x400.png";
+import freezer1Full from "../assets/gallery/freezer-1-1600x1067.png";
 
 const SITE = { url: "https://example.com", name: "Pine Ridge Beef" };
-
 const title = "Gallery — Pasture, Processing & Freezer | Pine Ridge Beef";
 const description =
   "See our pasture, herd, and finished beef packaging. Realistic, transparent look at what to expect when you reserve a quarter, half, or whole share.";
 
-/**
- * Define gallery items once.
- * Make sure files exist in /public/images/gallery/ with these exact names/sizes.
- */
+// define once for mapping
 const ITEMS = [
-  {
-    id: "pasture-1",
-    alt: "Cattle grazing in green pasture at sunset",
-    thumb: "/images/gallery/pasture-1-600x400.png",
-    full: "/images/gallery/pasture-1-1600x1067.png",
-    w: 600, h: 400, W: 1600, H: 1067,
-  },
-  {
-    id: "pasture-2",
-    alt: "Rotational grazing paddock with temporary fencing",
-    thumb: "/images/gallery/pasture-2-600x400.png",
-    full: "/images/gallery/pasture-2-1600x1067.png",
-    w: 600, h: 400, W: 1600, H: 1067,
-  },
-  {
-    id: "herd-1",
-    alt: "Calm herd near a tree line with blue sky",
-    thumb: "/images/gallery/herd-1-600x400.png",
-    full: "/images/gallery/herd-1-1600x1067.png",
-    w: 600, h: 400, W: 1600, H: 1067,
-  },
-  {
-    id: "processor-1",
-    alt: "USDA processor exterior with loading bay",
-    thumb: "/images/gallery/processor-1-600x400.png",
-    full: "/images/gallery/processor-1-1600x1067.png",
-    w: 600, h: 400, W: 1600, H: 1067,
-  },
-  {
-    id: "packaging-1",
-    alt: "Vacuum-sealed steaks with clear labels",
-    thumb: "/images/gallery/packaging-1-600x400.png",
-    full: "/images/gallery/packaging-1-1600x1067.png",
-    w: 600, h: 400, W: 1600, H: 1067,
-  },
-  {
-    id: "freezer-1",
-    alt: "Chest freezer neatly organized with labeled packages",
-    thumb: "/images/gallery/freezer-1-600x400.png",
-    full: "/images/gallery/freezer-1-1600x1067.png",
-    w: 600, h: 400, W: 1600, H: 1067,
-  },
+  { id: "pasture-1", alt: "Cattle grazing in green pasture at sunset", thumb: pasture1Thumb, full: pasture1Full },
+  { id: "pasture-2", alt: "Rotational grazing paddock with temporary fencing", thumb: pasture2Thumb, full: pasture2Full },
+  { id: "herd-1", alt: "Calm herd near a tree line with blue sky", thumb: herd1Thumb, full: herd1Full },
+  { id: "processor-1", alt: "USDA processor exterior with loading bay", thumb: processor1Thumb, full: processor1Full },
+  { id: "packaging-1", alt: "Vacuum-sealed steaks with clear labels", thumb: packaging1Thumb, full: packaging1Full },
+  { id: "freezer-1", alt: "Chest freezer neatly organized with labeled packages", thumb: freezer1Thumb, full: freezer1Full },
 ];
 ---
 
@@ -67,97 +42,44 @@ const ITEMS = [
       "itemListElement": ITEMS.map((it, i) => ({
         "@type": "ImageObject",
         "position": i + 1,
-        "contentUrl": `${SITE.url}${it.full}`,
-        "thumbnailUrl": `${SITE.url}${it.thumb}`,
-        "caption": it.alt
-      }))
+        "contentUrl": new URL(it.full.src, SITE.url).toString(),
+        "thumbnailUrl": new URL(it.thumb.src, SITE.url).toString(),
+        "caption": it.alt,
+      })),
     })}
   </script>
 
   <style>
-    /* Open/close behavior */
-    .lb { opacity: 0; pointer-events: none; }
-    .lb:target { opacity: 1; pointer-events: auto; }
-
-    /* Fullscreen overlay, scrolls if content is taller than viewport */
+    .lb { opacity:0; pointer-events:none; }
+    .lb:target { opacity:1; pointer-events:auto; }
     .lb {
-      position: fixed;
-      inset: 0;
-      z-index: 60;
-      background: rgba(0,0,0,.8);
-      overflow: auto; /* allow scrolling inside overlay */
+      position:fixed; inset:0; z-index:60;
+      background:rgba(0,0,0,.8); overflow:hidden;
     }
-
-    /* Center content with safe padding so close button & caption fit */
     .lb__inner {
-      min-height: 100%;
-      display: flex;
-      align-items: center;  /* vertical center when it fits */
-      justify-content: center;
-      padding: 4rem 1rem;   /* top/btm room for caption/close */
+      min-height:100%; display:flex; align-items:center; justify-content:center;
+      padding:4rem 1rem;
     }
-
-    /* Constrain figure to viewport */
-    .lb__figure {
-      width: min(90vw, 1100px);
-    }
-
-    /* Fit image within viewport height accounting for padding */
+    .lb__figure { width:min(90vw,1100px); }
     .lb__img {
-      width: 100%;
-      height: auto;
-      max-height: calc(100vh - 8rem);  /* never taller than screen */
-      object-fit: contain;              /* letterbox if needed */
-      border-radius: .75rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,.45);
-      border: 1px solid rgba(255,255,255,.1);
-      display: block;
+      width:100%; height:auto; max-height:calc(100vh - 8rem);
+      object-fit:contain; border-radius:.75rem;
+      box-shadow:0 10px 30px rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.1);
     }
-
     .lb__caption {
-      color: rgba(255,255,255,.9);
-      text-align: center;
-      font-size: .95rem;
-      margin-top: .75rem;
-      padding: 0 .5rem;
+      color:rgba(255,255,255,.9); text-align:center;
+      font-size:.95rem; margin-top:.75rem;
     }
-
-    /* Close button sits in safe top-right and stays tappable */
     .lb__close {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      color: rgba(255,255,255,.9);
-      font-size: 2rem;
-      line-height: 1;
-      text-decoration: none;
+      position:fixed; top:1rem; right:1rem;
+      color:rgba(255,255,255,.9); font-size:2rem; text-decoration:none;
     }
-
-    /* Make the backdrop area outside figure clickable to close */
-    .lb__backdrop {
-      position: fixed;
-      inset: 0;
-    }
-
-    /* Minor reset for gallery section images (optional) */
-    section img { border-radius: 0; margin: 0; }
-
-    @media (min-width: 768px) {
-      .lb__inner { padding: 5rem 2rem; }
-      .lb__img { max-height: calc(100vh - 10rem); }
-    }
-    .galleryImg{
-            width: 100%;
-    height: auto;
-    max-height: calc(100vh - 8rem);
-    object-fit: contain;
-    object-fit: contain;
-    border-radius: .75rem;
-    padding:10px;
-    display: block;
-    }
-    .lb{
-        overflow:hidden;
+    .lb__backdrop { position:fixed; inset:0; }
+    .section Img {
+      margin-top:0px;
+      margin-bottom:0px;
+      border-radius:0px;
     }
   </style>
 
@@ -177,13 +99,13 @@ const ITEMS = [
         {ITEMS.map((it) => (
           <li class="group">
             <a href={`#${it.id}`} class="block rounded-xl overflow-hidden border border-black/10 bg-white">
-              <img
+              <Img
                 src={it.thumb}
                 alt={it.alt}
-                width={it.w}
-                height={it.h}
-                loading="lazy"
-                decoding="async"
+                sizes="(min-width:1024px) 31vw, (min-width:768px) 48vw, 100vw"
+                widths={[320, 480, 600, 720]}
+                quality={70}
+                format="webp"
                 class="w-full h-auto transition-transform duration-200 group-hover:scale-[1.02]"
               />
             </a>
@@ -198,17 +120,16 @@ const ITEMS = [
     <div id={it.id} class="lb">
       <a href="#close" class="lb__backdrop" aria-label="Close lightbox"></a>
       <a href="#close" aria-label="Close" class="lb__close">×</a>
-
       <div class="lb__inner">
         <figure class="lb__figure">
-          <img
+          <Img
             src={it.full}
             alt={it.alt}
-            width={it.W}
-            height={it.H}
-            loading="eager"
-            fetchpriority="high"
-            class="galleryImg"
+            sizes="(min-width:1024px) 90vw, 100vw"
+            widths={[800, 1000, 1200, 1400, 1600]}
+            quality={80}
+            format="webp"
+            class="lb__img"
           />
           <figcaption class="lb__caption">{it.alt}</figcaption>
         </figure>
