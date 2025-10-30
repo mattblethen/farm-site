@@ -8,7 +8,6 @@ const links = [
   { label: "Contact", href: "/contact" },
 ];
 ---
-
 <header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-black/5">
   <div class="mx-auto max-w-[1200px] px-4 md:px-6 py-3 flex items-center justify-between">
     <a href="/" class="font-semibold tracking-tight text-[#1C1C1C] hover:text-[#2F5D46] transition">
@@ -16,7 +15,7 @@ const links = [
     </a>
 
     <!-- Desktop nav -->
-    <nav class="hidden md:flex gap-6 text-sm">
+    <nav class="hidden md:flex gap-6 text-sm" aria-label="Primary">
       {links.map((l) => (
         <a href={l.href} class="hover:underline">{l.label}</a>
       ))}
@@ -41,24 +40,30 @@ const links = [
     </button>
   </div>
 
-  <!-- Mobile menu drawer (JS toggles data-open & aria-hidden) -->
+  <!-- Mobile menu drawer (accessible modal) -->
   <div
     id="mobileMenu"
-    class="md:hidden fixed inset-0 z-50 pointer-events-none"
+    role="dialog"
+    aria-modal="true"
+    hidden
+    inert
     data-open="false"
-    aria-hidden="true"
+    class="md:hidden fixed inset-0 z-50"
   >
     <!-- Backdrop -->
     <div
       data-backdrop
       class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-200"
+      style="opacity:0"
     ></div>
 
     <!-- Sheet -->
     <nav
       data-sheet
+      aria-label="Mobile"
       class="absolute left-0 right-0 top-0 origin-top rounded-b-2xl bg-white border-b border-black/10 shadow-xl
              translate-y-[-100%] transition-transform duration-300"
+      style="transform: translateY(-100%)"
     >
       <div class="px-4 py-3 flex items-center justify-between">
         <span class="font-semibold">Menu</span>
@@ -97,7 +102,7 @@ const links = [
     </nav>
   </div>
 
-  <!-- Minimal, inline script: no hydration library needed -->
+  <!-- Minimal, inline script: accessible toggle + focus trap -->
   <script is:inline>
     (() => {
       const btn = document.querySelector('[data-menu-button]');
@@ -107,34 +112,63 @@ const links = [
       const backdrop = panel.querySelector('[data-backdrop]');
       const sheet = panel.querySelector('[data-sheet]');
       const closeBtn = panel.querySelector('[data-close]');
-      const links = panel.querySelectorAll('[data-menu-link]');
+      const menuLinks = panel.querySelectorAll('[data-menu-link]');
+
+      const focusablesSelector = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+      let lastFocus = null;
+
+      function firstFocusable() {
+        return panel.querySelector(focusablesSelector);
+      }
+      function focusTrap(e) {
+        if (e.key !== 'Tab') return;
+        const items = [...panel.querySelectorAll(focusablesSelector)]
+          .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      }
 
       const open = () => {
+        lastFocus = document.activeElement;
+        panel.hidden = false;
+        panel.removeAttribute('inert');
         panel.dataset.open = 'true';
-        panel.setAttribute('aria-hidden', 'false');
         document.body.classList.add('overflow-hidden');
         btn.setAttribute('aria-expanded', 'true');
-        panel.style.pointerEvents = 'auto';
-        // animate in
+
         requestAnimationFrame(() => {
-          backdrop && (backdrop.style.opacity = '1');
-          sheet && (sheet.style.transform = 'translateY(0)');
+          if (backdrop) backdrop.style.opacity = '1';
+          if (sheet) sheet.style.transform = 'translateY(0)';
         });
-        // focus first link for accessibility
-        links[0]?.focus();
+
+        panel.addEventListener('keydown', focusTrap);
+        firstFocusable()?.focus();
       };
 
       const close = () => {
         panel.dataset.open = 'false';
-        panel.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('overflow-hidden');
         btn.setAttribute('aria-expanded', 'false');
-        panel.style.pointerEvents = 'none';
-        // animate out
-        backdrop && (backdrop.style.opacity = '0');
-        sheet && (sheet.style.transform = 'translateY(-100%)');
-        // return focus to button
-        btn.focus();
+
+        if (backdrop) backdrop.style.opacity = '0';
+        if (sheet) sheet.style.transform = 'translateY(-100%)';
+
+        // wait for transition to finish before hiding/inerting
+        const done = () => {
+          panel.setAttribute('inert', '');
+          panel.hidden = true;
+          sheet?.removeEventListener('transitionend', done);
+        };
+        sheet?.addEventListener('transitionend', done);
+
+        panel.removeEventListener('keydown', focusTrap);
+        lastFocus?.focus();
       };
 
       btn.addEventListener('click', () => {
@@ -144,7 +178,7 @@ const links = [
 
       closeBtn?.addEventListener('click', close);
       backdrop?.addEventListener('click', close);
-      links.forEach((a) => a.addEventListener('click', close));
+      menuLinks.forEach((a) => a.addEventListener('click', close));
 
       // ESC to close
       window.addEventListener('keydown', (e) => {
